@@ -23,22 +23,22 @@ function loginUser($email, $password){
 
     echo "<h1 style='color: red'> LOG ME IN (IMPLEMENT ME) </h1>";
     //open connection to the database and check if username exist in the database
-    /*
-    $username = mysql_real_escape_string($username); // escape string before passing it to query.
-    $query = mysql_query("SELECT username FROM Users WHERE username='".$username."'");
-    */
-    $select = mysqli_query($conn, "SELECT * FROM students WHERE email = '".$_POST['email']."'");
-    if(mysqli_num_rows($select)) {
-        exit('This email address exist!');
+    if(isset($_POST['login'])) {
+        $select = mysqli_query($conn, "SELECT * FROM students WHERE email='" . $_POST["email"] . "' AND
+        password='" . $_POST["password"] . "'    ");
+       
+        //if it does, check if the password is the same with what is given
+        $num = mysqli_num_rows($select);
+       
+        //if true then set user session for the user and redirect to the dashboard
+        if($num > 0) {
+            $row = mysqli_fetch_array($select);
+            header("location:dashboard.php");
+            exit();
+        }
+        else {}
     }
-
-    //if it does, check if the password is the same with what is given
-    $hash = password_hash($password, PASSWORD_DEFAULT);
-    session_start();
-        $_SESSION["Logged"] = $username;
-        header("Location: http://localhost/zuri/userAuthMySQL/dashboard.php");
-        exit()
-    //if true then set user session for the user and redirect to the dasbboard
+    
 }
 
 
@@ -47,7 +47,15 @@ function resetPassword($email, $password){
     $conn = db($email, $password);
     echo "<h1 style='color: red'>RESET YOUR PASSWORD (IMPLEMENT ME)</h1>";
     //open connection to the database and check if username exist in the database
-    //if it does, replace the password with $password given
+    if(isset($_POST['login'])) {
+        $select = mysqli_query($conn, "SELECT * FROM students WHERE email='" . $_POST["email"] . "' AND
+        password='" . $_POST["password"] . "'    ");
+
+        $hash = password_hash($password, PASSWORD_DEFAULT); //if it does, replace the password with $password given
+    } else {
+        echo "Invalid";
+    }
+    
 }
 
 function getusers(){
