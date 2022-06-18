@@ -90,7 +90,25 @@ function getusers(){
     //loop through the users and display them on a table
 }
 
- function deleteaccount($id){
-     $conn = db();
+function deleteaccount($id){
+     $conn = db($id);
      //delete user with the given id from the database
- }
+     $sql = "DELETE FROM students WHERE id= '" . $_POST["id"];
+     if ($conn->query($sql) === TRUE) {
+        echo "Record deleted successfully";
+      } else {
+        echo "Error deleting record: ";
+      }
+      
+      $conn->close();
+}
+
+ // logout
+function logout(){
+    if ( isset( $_SESSION['Logged'] ) ) unset( $_SESSION['Logged'] ) {
+        session_destroy();
+    }
+
+    Header("Location: dashboard.php");
+    exit();
+}
